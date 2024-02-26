@@ -234,29 +234,29 @@
                     });
                 });
              
-                // editProcess = function (selectedItem) {
-                // $('#ajaxEditModel').modal('show')
-                // document.getElementById('#ajaxEditModel') 
+                editProcess = function (selectedItem) {
+                $('#ajaxEditModel').modal('show')
+                document.getElementById('#ajaxEditModel') 
 
 
 
-                // $('body').on('click', '.showModalPhoto', function(e) {
-                //     e.preventDefault();
-                //     $('.alert-danger').html('');
-                //     $('.alert-danger').hide();
-                //     //get src of image 
-                //     src = $(this).find('img').attr('src');
-                //     //add that inside modal
-                //     $('#dataPhotoElement').html(`<div class="row">
-                //             <div class="col-md-4">
-                //             <img src="${src}" style="height:500px;width:465px;margin-bottom:10px;top:0;right:0;"/>
-                //             </div>
-                //         </div>`);
-                //     $('#modelHeading').html("Show Photo");
-                //     $('#ajaxModelForPhoto').modal('show'); //show modal
+                $('body').on('click', '.showModalPhoto', function(e) {
+                    e.preventDefault();
+                    $('.alert-danger').html('');
+                    $('.alert-danger').hide();
+                    //get src of image 
+                    src = $(this).find('img').attr('src');
+                    //add that inside modal
+                    $('#dataPhotoElement').html(`<div class="row">
+                            <div class="col-md-4">
+                            <img src="${src}" style="height:500px;width:465px;margin-bottom:10px;top:0;right:0;"/>
+                            </div>
+                        </div>`);
+                    $('#modelHeading').html("Show Photo");
+                    $('#ajaxModelForPhoto').modal('show'); //show modal
 
-                //     });   
-                // }
+                    });   
+                }
                     check = function()
                     {
                     $('body').on('click', '.edit_btn', function () {

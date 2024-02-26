@@ -84,17 +84,12 @@
             </tbody>
         </table>
 
-
-
-
-
         <div class="modal fade" id="ajaxModel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title" id="modelHeading"></h4>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-
                     </div>
                     <div class="modal-body">
                         <form id="selectFile" method="POST" action="javascript:void(0)" accept-charset="utf-8"
@@ -117,7 +112,7 @@
             </div>
         </div>
 
-        <div class="modal fade" id="ajaxEditModel" aria-hidden="true">
+        <div class="modal fade" id=" " aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -125,30 +120,13 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                    <form id="toEditDelectFile" method="GET" data-action="" accept-charset="utf-8"
+                    <form id="toEditDelectFile" method="POST" data-action="" accept-charset="utf-8"
                         enctype="multipart/form-data">
                         @csrf
                         <div class="row">
 
-                            <div class="form-group">
-                                <input type="hidden" name="id" id="id">
-                            </div>
-                            <div class="array-images-forEdit style-array_img close-forEdit" aria-label="Close"><span>&times;</span></button>
-                                <!-- <a href="javascript:void(0)" data-toggle="tooltip" data-id="2"
-                                    data-filter="/storage/doc" data-original-title="Edit" 
-                                    class="showModalPhoto">
-                                    <img src="https://i.pinimg.com/originals/e8/c7/c4/e8c7c4d4e14a9e3b21faf3d7b37c5b03.jpg" 
-                                    style="height:120px;width:105px;margin-bottom:10px;top:0;right:0;" />
-                                </a> -->
-                                <a href="javascript:void(0)" data-toggle="tooltip" data-id="2"
-                                    data-filter="/storage/doc" data-original-title="Edit" 
-                                    class="showModalPhoto">
+    
 
-                                    <!--//here we have data images array  -->
-                                    <img src="https://i.pinimg.com/originals/e8/c7/c4/e8c7c4d4e14a9e3b21faf3d7b37c5b03.jpg" 
-                                    style="height:120px;width:105px;margin-bottom:10px;top:0;right:0;" />
-                                </a>
-                            </div>
                             <!---To show Model -->
                                 <div class="modal fade" id="ajaxModelForPhoto" role="dialog">
                                     <div class="modal-dialog">
@@ -259,18 +237,52 @@
                 // }
                     check = function()
                     {
-                    $('body').on('click', '.edit_btn', function () {
-                        var id = $(this).val();            
+                     
+                    $('body').on('click', '.edit_btn', function () {         
                         
                     $.ajax({    
-                        type:'GET',
-                        url: '/edit/'.id,
+                        type:'POST',
+                        url: "{{ route('post.edit') }}",
                         dataType: 'json',
-                        success: function(response) {
-                            alert("success");
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            "id": $(this).data('id')
                         },
+                        success: function(data) {   
+                            // alert(data);
+                            
+                                
+                               
+                            // $('#ajaxEditModel').modal('show')
+                            // document.getElementById('#ajaxEditModel') 
+                            // $('.img_arr').html;
+
+                            
+                            ////    SHOULD WATCH THIS LINK
+                            // https://stackoverflow.com/questions/67297514/show-specific-array-images-in-modal-using-laravel-jquery-ajax
+                            
+                            // LOOP THROUGH IMAGES BY DATA.STORGAE AND SHOW IN MODEL 
+
+                            // THEN DELETE FUNCTION
+                                
+                            // FONT AWESOME
+
+                            //SHOW POST IN USER INDEX FILE
+                            
+                            
+                            // // Append the img element to the col-md-4 div
+                            // $imageDiv.append($image);
+
+                            // // Append the col-md-4 div to the container
+                            // $imageContainer.append($imageDiv);
                         
-                        error: function(ts) { alert("fail");
+
+                        // Show the modal with the images
+                        // $('#modelHeading').html("Show Photos");
+                        // $('#ajaxModelForPhoto').modal('show');
+                                },
+                        
+                        error: function(ts) { alert("check");
 
                         }
 

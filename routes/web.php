@@ -2,7 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\PostController;
+use App\Http\Controllers\PostController;    
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\NotificationSendController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -18,7 +20,7 @@ Route::get('/', [AuthController::class, 'index'])->name('auth.login');
 
 
 Route::post('/login', [AuthController::class, 'postLogin'])->name('login.post');
-;
+
 
 Route::middleware(['auth'])->group(function () {
     
@@ -28,7 +30,7 @@ Route::middleware(['auth'])->group(function () {
     
             Route::get('/create', [PostController::class, 'create'])->name('post.create');
             Route::post('/store', [PostController::class, 'store'])->name('post.store');
-            Route::get('/edit/{id}', [PostController::class, 'edit'])->name('post.edit');
+            Route::post('/edit', [PostController::class, 'edit'])->name('post.edit');
     
             Route::post('/update/{id}', [PostController::class, 'update'])->name('post.update');
             Route::get('/list', [PostController::class, 'list'])->name('list');
@@ -37,6 +39,16 @@ Route::middleware(['auth'])->group(function () {
     
     });
 
+});
+
+
+
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+
+Route::group(['middleware' => 'auth'],function(){
+    Route::post('/store-token', [NotificationSendController::class, 'updateDeviceToken'])->name('store.token');
+    Route::post('/send-web-notification', [NotificationSendController::class, 'sendNotification'])->name('send.web-notification');
 });
 
 

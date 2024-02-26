@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\Post;
-
+use App\Models\Image;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -25,17 +26,20 @@ class PostController extends Controller
     {
         $request->validate([
             'files' => 'required',
-            'files.*' => 'mimes:csv,txt,xlx,xls,pdf'
+            'files.*' => 'required|image|mimes:jpeg,png,jpg,svg|max:2048'
         ]);
         
         try {
             $user =  Auth::user()->toArray();
             $role = $user['role_type'];
-            
+            $user_id = $user['id'];
+            \Log::info('user_id');
+            \Log::info($user_id);
             if($role == 1)
             {
-             \Log::info("role =1");   
-                $insert = [];
+           
+                // $insert = [];
+                $post = Post::create(['user_id' => $user_id]);
                 if ($request->TotalFiles > 0) {
                     
                     for ($x = 0; $x < $request->TotalFiles; $x++) {
@@ -45,15 +49,24 @@ class PostController extends Controller
                             $file = $request->file('files'. $x);
                             $path = $file->store('public/docs');
                             $name = $file->getClientOriginalName();  
-                        
-                            $insert[$x]['doc_name'] = $name;
-                            $insert[$x]['docs_path'] = $path;
-                            $insert[$x]['user_id'] = $user['id'];
+            
+                            $extention = time() . '.' . $file->getClientOriginalExtension();
+
+                            Storage::disk('local')->put('postImg/' .$user['id'].'/'.$name. '.' .$extention, 'public');
+                        //    \Log::info($request->all());
+                            Image::create([
+                                'post_id' => $post->id,
+                                'name'     => $name,
+                                'path' => $path,
+                            ]); 
+                            // $insert[$x]['doc_name'] = $name;
+                            // $insert[$x]['docs_path'] = $path;
+                            // $insert[$x]['user_id'] = $user['id'];
 
                         }
                     }
                    
-                    $post = Post::insert($insert);
+                    // $post = Post::insert($insert);
                     return response()->json(['message', 'Added Successfully!']);
                 }else{
                     return response()->json(['message', 'No files']);
@@ -68,22 +81,32 @@ class PostController extends Controller
         }
     }
  
-    public function edit($id)
+    public function edit(Request $req)
     {
+        
+        $post = Post::find($req->id);
 
-        $post = Post::find($id);
+        $data = [];
+        
+        foreach($post->images as $k => $img)
+        {
+            $data[$k]['id'] = $img['id'];
+            $data[$k]['name']= $img['name'];
+            $data[$k]['path'] = $img['path'];
+        }
 
-            
+       
+        \Log::info($data);
+        if($data){
 
-        if($post){
             return response()->json([
                 'status' => 200,
-                'post' => $post
+                'data' => $data
             ]);
         }else{
             return response()->json([
                 'status' => 404,
-                'post' => "Post Not Found"
+                'data' => "Post Not Found"
             ]);
         }
 
